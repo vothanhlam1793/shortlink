@@ -40,8 +40,16 @@ mongoose.connect(uri, {
 var Short = app.short = restful.model('short', mongoose.Schema({
     long: String,
     short: String
-})).methods(['get', 'post', 'put', 'delete']);
+})).methods(['get', 'post']);
 Short.register(app, '/shorts');
+
+var Log = app.log = restful.model('log', mongoose.Schema({
+    query: Object,
+    date: Date,
+    short: String
+})).methods(['get', 'post', 'put', 'delete']);
+Log.register(app, '/logs');
+
 
 app.get("/", (req, res) => {
     res.render("index");
@@ -58,6 +66,12 @@ app.get("/:short", function(req, res){
                 res.send("Have wrong query - long EMPTY");                
             } else {
                 res.render("short",{long:r[0].long});
+                var l = new Log({
+                    query: req.query,
+                    data: new Date(),
+                    short: req.params.short
+                });
+                l.save();
             }
         } else {
             res.send("Have wrong query");
