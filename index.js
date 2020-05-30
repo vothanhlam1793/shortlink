@@ -46,7 +46,8 @@ Short.register(app, '/shorts');
 var Log = app.log = restful.model('log', mongoose.Schema({
     query: Object,
     date: Date,
-    short: String
+    short: String,
+    ip: String
 })).methods(['get', 'post', 'put', 'delete']);
 Log.register(app, '/logs');
 
@@ -69,7 +70,8 @@ app.get("/:short", function(req, res){
                 var l = new Log({
                     query: req.query,
                     data: new Date(),
-                    short: req.params.short
+                    short: req.params.short,
+                    ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
                 });
                 l.save();
             }
