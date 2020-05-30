@@ -26,6 +26,13 @@
             <label for="long">Đường dẫn: </label>
             <input class="form-control"  v-model="link.long" id="long" v-on:change="change()">
         </div>
+        <div>
+            <h5>Tuỳ chỉnh</h5>
+            <div  class="form-group">
+                <label for="long">Đường dẫn: </label>
+                <input class="form-control"  v-model="link.short" id="long" v-on:change="change()">
+            </div>
+        </div>
         <div  class="form-group">
             <button v-on:click="short()" class="btn btn-primary" :disabled="disable_gen">Rút gọn</button>
         </div>

@@ -109,10 +109,32 @@ app.post("/", function(req, res){
         })
         return;
     }
-    var s = new Short(req.body);
-    s.save();
-    res.send({
-        data: "OK"
+    if(req.body.short.length < 6){
+        res.send({
+            data: "ERROR",
+            why: "Không thể tạo đường dẫn ngắn hơn 6 kí tự"
+        })
+    }
+    Short.find({short: req.body.short}, function(e,r){
+        if(e){
+            res.send({
+                data: "ERROR",
+                why: "Hệ thống lưu trữ bị lỗi"
+            });
+            return;
+        }
+        if(r.length == 0){
+            var s = new Short(req.body);
+            s.save();
+            res.send({
+                data: "OK"
+            })
+        } else {
+            res.send({
+                data: "ERROR",
+                why: "Không thể tạo link với code này vì có thể đã tồn tại: " + req.body.short
+            });
+        }
     })
 })
 
