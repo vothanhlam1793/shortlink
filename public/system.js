@@ -20,7 +20,8 @@ var app = new Vue({
             short: ""
         },
         result: "",
-        disable_gen: false
+        disable_gen: false,
+        advance: false,
     },
     methods:{
         short: function(){
