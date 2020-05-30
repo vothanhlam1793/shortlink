@@ -18,7 +18,9 @@ app.use(bodyParser.json({
     type: 'application/vnd.api+json'
 }));
 app.use(methodOverride());
-app.use('/static', express.static('public'));
+app.use(express.static('public'));
+//app.use('/static', express.static('public'));
+app.use(express.static('some_other_folder'));
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
