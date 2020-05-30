@@ -57,6 +57,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/:short", function(req, res){
+    var forwarded = req.headers['x-forwarded-for']
+    var ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
+    console.log("IP", ip);
     Short.find({short: req.params.short}, function(e, r){
         if(e){
             res.send("Server have error - We will fix it ajust!");
@@ -71,7 +74,7 @@ app.get("/:short", function(req, res){
                     query: req.query,
                     data: new Date(),
                     short: req.params.short,
-                    ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress
+                    ip: ip
                 });
                 l.save();
             }
