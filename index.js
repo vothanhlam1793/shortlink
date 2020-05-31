@@ -72,7 +72,7 @@ app.get("/:short", function(req, res){
                 res.render("short",{long:r[0].long});
                 var l = new Log({
                     query: req.query,
-                    data: new Date(),
+                    date: new Date(),
                     short: req.params.short,
                     ip: ip
                 });
