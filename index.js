@@ -57,7 +57,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/:short", function(req, res){
-    var forwarded = req.headers['x-forwarded-for']
+    var forwarded = req.headers['x-real-ip']
     var ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
     console.log("IP", ip);
     Short.find({short: req.params.short}, function(e, r){
