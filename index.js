@@ -157,4 +157,24 @@ app.post("/", function(req, res){
     })
 })
 
+app.get("/mon/:code", function(req, res){
+    if(req.params.code != "yoursolution"){
+        res.send("Hello World!. - :)");
+        return;
+    }
+    res.render("logs");
+});
+
+app.get("/logs/search/:short", function(req, res){
+    Log.find({short: req.params.short}, function(e,r){
+        if(e){
+            res.send({
+                data: "ERROR",
+                why: "Database - I don't now"
+            })
+            return;
+        }
+        res.send(r);
+    })
+})
 app.listen(7000);
