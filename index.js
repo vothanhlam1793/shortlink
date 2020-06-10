@@ -165,6 +165,10 @@ app.get("/mon/:code", function(req, res){
     res.render("logs");
 });
 
+app.get("/chitiet/log", function(req, res){
+    res.render("elogs");
+})
+
 app.get("/logs/search/:short", function(req, res){
     Log.find({short: req.params.short}, function(e,r){
         if(e){

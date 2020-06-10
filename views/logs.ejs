@@ -1,41 +1,25 @@
 <html>
-
-<head>
-    <title>Báo cáo hoạt động</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="/bootstrap.css">
-    <!-- jQuery library -->
-    <script src="/jquery.min.js"></script>
-    <!-- Popper JS -->
-    <script src="/popper.js"></script>
-    <script src="/bootstrap.js"></script>
-    <script src="/jquery-2.1.3.min.js" type="text/javascript"></script>
-    <script src="/underscore.js" type="text/javascript"></script>
-    <script src="/backbone.js" type="text/javascript"></script>
-    <script src="/vue.js"></script>
-    <script src="/model.js"></script>
-</head>
+<% include header %>
 
 <body>
-    <div id="app">  
+    <div id="app" class="container">
         <div>
-            <input v-model="short" placeholder="Điền shortcode vào đây nhé">
-            <button v-on:click="search()">Tìm kiếm</button>
             <div>
+                <h1>Logs</h1>
                 <div>
-                    <p>Tổng: <span>{{data.length}}</span></p>
+                    <p>Tổng: <span>{{logs.length}}</span></p>
                 </div>
-                <div v-for="log in data" class="alert alert-primary"> 
-                    <p>Thời gian: {{log.date}}</p>
-                    <p>IP: {{log.ip}}</p>
-                    <div v-if="log.query">
-                        <p>Xuất phát: <span v-if="log.query.fbclid">Facebook</span><span v-else-if="log.query.utm_source">{{log.query.utm_source}}</span> <span v-else>Nâng cao</span></p>
-                    </div>
-                    <div v-else>
-                        <p>Xuất phát: Trực tiếp</p>
-                    </div>
+                <div>
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Ngắn</th>
+                            <th>Số lần</th>
+                        </tr>
+                        <tr v-for="short in shorts">
+                            <td>{{short.short}}</td>
+                            <td>{{count_short(short.short)}}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -46,25 +30,45 @@
             data: {
                 status: "Xin chào!.",
                 short: "",
-                data: []
+                data: [],
+                logs: [],
+                shorts: []
 
-            }, 
+            },
             methods: {
-                search: function(){
-                var a = fetch("/logs/search/" + this.short).then((resp)=> resp.json()).then((data)=>{
+                search: function () {
+                    fetch("/logs/search/" + this.short).then((resp) => resp.json()).then((data) => {
+                        if (data.status == 404) {
+                            alert("Có lỗi gì đó á!.");
+                            return;
+                        }
+                        app.data = data;
+                    })
+                }, 
+                count_short: function(code){
+                    var a = app.logs.filter(function(log){
+                        return log.short == code;
+                    })
+                    return a.length;
+                }
+            },
+            created: function(){
+                fetch("/logs" + this.short).then((resp)=> resp.json()).then((data)=>{
                     if(data.status == 404){
                         alert("Có lỗi gì đó á!.");
                         return;
                     }
-                    data.forEach(element => {
-                        var a = new Date(element.date);
-                        element.date = a.toLocaleTimeString() + " - " + a.toLocaleDateString();
-                    });
-                    app.data = data;
+                    app.logs = data;
+                })
+                fetch("/shorts" + this.short).then((resp)=> resp.json()).then((data)=>{
+                    if(data.status == 404){
+                        alert("Có lỗi gì đó á!.");
+                        return;
+                    }
+                    app.shorts = data;
                 })
             }
-            },
-            
+
         });
     </script>
 </body>
