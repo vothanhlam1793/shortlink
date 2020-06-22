@@ -25,6 +25,7 @@
     "mongoose": "^5.9.16",
     "morgan": "^1.10.0",
     "node-restful": "^0.2.6",
+    "nodemon": "^2.0.4",
     "request": "^2.88.2",
     "request-promise": "^4.2.5"
   }

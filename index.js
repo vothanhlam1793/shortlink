@@ -56,6 +56,10 @@ app.get("/", (req, res) => {
     res.render("index");
 })
 
+app.get("/view_count", (req,res) => {
+    res.render("logs");
+})
+
 app.get("/:short", function(req, res){
     var forwarded = req.headers['x-real-ip']
     var ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
