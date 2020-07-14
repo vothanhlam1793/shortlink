@@ -1,7 +1,8 @@
 <html>
     <head>
         <script>
-            location.replace("<%= long %>");
+            var a = "<%= long %>";
+            location.replace(a.replace(/&amp;/g, "&"));
         </script>
     </head>
 </html>
