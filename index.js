@@ -39,7 +39,8 @@ mongoose.connect(uri, {
 
 var Short = app.short = restful.model('short', mongoose.Schema({
     long: String,
-    short: String
+    short: String,
+    webhooks: Array
 })).methods(['get', 'post']);
 Short.register(app, '/shorts');
 
@@ -65,6 +66,7 @@ app.get("/:short", function(req, res){
             res.send("Server have error - We will fix it ajust!");
             return;
         }
+        console.log(r);
         if(r.length == 1){
             if(r[0].long == ""){
                 res.send("Have wrong query - long EMPTY");                
