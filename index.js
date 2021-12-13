@@ -56,6 +56,18 @@ Log.register(app, '/logs');
 app.get("/", (req, res) => {
     res.render("index");
 })
+var fetch = require("node-fetch")
+function runwebhook(whs){
+    whs.forEach(function(e){
+        try {
+            fetch(e).then(d => {
+                console.log(d);
+            })
+        } catch (e) {
+            return;
+        }
+    })
+}
 
 app.get("/:short", function(req, res){
     var forwarded = req.headers['x-real-ip']
@@ -72,6 +84,8 @@ app.get("/:short", function(req, res){
                 res.send("Have wrong query - long EMPTY");                
             } else {
                 res.render("short",{long:r[0].long});
+                // function run webhooks
+                runwebhook(r[0].webhooks || []);
                 var l = new Log({
                     query: req.query,
                     date: new Date(),
